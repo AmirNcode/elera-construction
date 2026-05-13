@@ -1,0 +1,40 @@
+---
+type Variant = 'primary' | 'secondary' | 'ghost';
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  type?: 'button' | 'submit';
+  class?: string;
+  /** When true, opens external links in a new tab with rel=noopener noreferrer. */
+  external?: boolean;
+}
+
+const {
+  href,
+  variant = 'primary',
+  type = 'button',
+  class: className = '',
+  external = false,
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center font-semibold tracking-wide text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-midnight';
+
+const variants: Record<Variant, string> = {
+  primary:
+    'bg-midnight text-cream hover:bg-midnight-deep px-6 py-3 rounded-sm',
+  secondary:
+    'bg-transparent text-ink border border-ink/70 hover:bg-ink hover:text-cream px-6 py-3 rounded-sm',
+  ghost:
+    'bg-transparent text-midnight underline underline-offset-4 decoration-2 decoration-transparent hover:decoration-midnight px-1 py-1',
+};
+
+const classes = `${base} ${variants[variant]} ${className}`;
+const externalAttrs = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+{href ? (
+  <a href={href} class={classes} {...externalAttrs}><slot /></a>
+) : (
+  <button type={type} class={classes}><slot /></button>
+)}
