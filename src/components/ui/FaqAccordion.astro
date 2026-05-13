@@ -1,0 +1,48 @@
+---
+interface FaqItem {
+  question: string;
+  /** Plain text or HTML string (rendered with set:html). */
+  answer: string;
+}
+interface Props {
+  items: FaqItem[];
+  /** When true, opening one item closes the others. */
+  singleExpand?: boolean;
+  class?: string;
+}
+
+const { items, singleExpand = true, class: className = '' } = Astro.props;
+---
+<div
+  class:list={['flex flex-col border-t border-hairline', className]}
+  data-single-expand={singleExpand ? 'true' : 'false'}
+>
+  {items.map((item) => (
+    <details class="border-b border-hairline group">
+      <summary class="flex items-center justify-between cursor-pointer py-5 list-none">
+        <span class="text-lg font-semibold text-ink pr-6">{item.question}</span>
+        <span
+          aria-hidden="true"
+          class="shrink-0 text-midnight text-xl transition-transform group-open:rotate-45"
+        >+</span>
+      </summary>
+      <div class="pb-5 text-muted text-base leading-relaxed" set:html={item.answer}></div>
+    </details>
+  ))}
+</div>
+
+<script>
+  // Single-expand behavior: when one <details> opens, close its siblings.
+  document.querySelectorAll<HTMLElement>('[data-single-expand="true"]').forEach((group) => {
+    const items = Array.from(group.querySelectorAll<HTMLDetailsElement>('details'));
+    items.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (item.open) {
+          items.forEach((other) => {
+            if (other !== item) other.open = false;
+          });
+        }
+      });
+    });
+  });
+</script>
