@@ -1,13 +1,22 @@
 ---
 import '~/styles/global.css';
+import { site } from '~/lib/site';
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Tailwind smoke test</title>
+    <title>Token smoke test</title>
   </head>
-  <body class="bg-red-500 text-white text-3xl p-12">
-    Tailwind is working if this is red.
+  <body>
+    <div class="container-x py-24">
+      <span class="eyebrow">Tokens loaded</span>
+      <h1 class="text-5xl mt-3">{site.name}</h1>
+      <p class="mt-4 text-muted max-w-prose">{site.description}</p>
+      <div class="mt-8 flex gap-3">
+        <span class="px-4 py-2 bg-midnight text-cream rounded">midnight on cream</span>
+        <span class="px-4 py-2 bg-midnight-soft text-midnight rounded">midnight on soft</span>
+      </div>
+    </div>
   </body>
 </html>

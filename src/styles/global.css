@@ -1,1 +1,104 @@
 @import "tailwindcss";
+
+/* ===== Brand tokens (CSS custom properties) =====
+   Single source of truth for the design system.
+   Tailwind picks these up via the @theme block below.
+*/
+:root {
+  /* Surfaces */
+  --color-cream: #F0EEE6;
+  --color-paper: #FFFFFF;
+  --color-ink: #14241B;
+  --color-slate: #1A1A1A;
+  --color-muted: #6B6B6B;
+  --color-hairline: #E5E0D8;
+
+  /* Brand */
+  --color-midnight: #1E3A5F;
+  --color-midnight-deep: #16304F;
+  --color-midnight-soft: #E8EDF3;
+
+  /* States */
+  --color-success: #5C8A6E;
+  --color-danger: #A04545;
+
+  /* Type */
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Rhythm */
+  --container-max: 1280px;
+  --gutter-mobile: 1.5rem;
+  --gutter-desktop: 3rem;
+  --section-py-mobile: 3.5rem;
+  --section-py-desktop: 6rem;
+}
+
+/* Map CSS variables into Tailwind theme tokens (Tailwind v4 syntax). */
+@theme {
+  --color-cream: var(--color-cream);
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-slate: var(--color-slate);
+  --color-muted: var(--color-muted);
+  --color-hairline: var(--color-hairline);
+  --color-midnight: var(--color-midnight);
+  --color-midnight-deep: var(--color-midnight-deep);
+  --color-midnight-soft: var(--color-midnight-soft);
+  --color-success: var(--color-success);
+  --color-danger: var(--color-danger);
+
+  --font-sans: var(--font-sans);
+}
+
+/* Base */
+html {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+@media (max-width: 768px) {
+  body { font-size: 16px; }
+}
+
+/* Headings default to tight tracking, no bottom margin (let layout decide spacing). */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  font-weight: 800;
+  color: var(--color-ink);
+  margin: 0;
+}
+
+/* Eyebrow utility class — used above section headings */
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--color-midnight);
+}
+
+/* Containers */
+.container-x {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter-mobile);
+}
+@media (min-width: 768px) {
+  .container-x { padding-inline: var(--gutter-desktop); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
