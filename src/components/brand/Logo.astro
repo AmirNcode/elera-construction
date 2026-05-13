@@ -1,0 +1,71 @@
+---
+type Variant = 'horizontal' | 'stacked' | 'icon';
+
+interface Props {
+  variant?: Variant;
+  /**
+   * Pixel size of the sunburst icon. Wordmark scales relative to this.
+   * Defaults to 36 for nav use.
+   */
+  size?: number;
+  /**
+   * Accessible label for the logo. Defaults to "Elera Construction home".
+   */
+  label?: string;
+  /**
+   * Optional extra Tailwind classes on the wrapper element.
+   */
+  class?: string;
+}
+
+const {
+  variant = 'horizontal',
+  size = 36,
+  label = 'Elera Construction home',
+  class: className = '',
+} = Astro.props;
+
+// Pre-compute the 16 ray rotations: 0, 22.5, 45 ... 337.5
+const rays = Array.from({ length: 16 }, (_, i) => i * 22.5);
+
+// Layout classes per variant
+const wrapperClass =
+  variant === 'stacked'
+    ? `inline-flex flex-col items-center gap-2 ${className}`
+    : variant === 'icon'
+      ? `inline-flex ${className}`
+      : `inline-flex items-center gap-3 ${className}`;
+
+const nameSize = variant === 'stacked' ? 'text-[1.375rem]' : 'text-[1.1875rem]';
+const subSize = variant === 'stacked' ? 'text-[0.6875rem]' : 'text-[0.625rem]';
+---
+<a href="/" aria-label={label} data-variant={variant} class={wrapperClass}>
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 60 60"
+    fill="none"
+    aria-hidden="true"
+  >
+    <circle cx="30" cy="30" r="5" fill="currentColor" />
+    <g
+      stroke="currentColor"
+      stroke-width="2.6"
+      stroke-linecap="round"
+      transform="translate(30 30)"
+    >
+      {rays.map((deg) => (
+        <line x1="0" y1="-22" x2="0" y2="-13" transform={`rotate(${deg})`} />
+      ))}
+    </g>
+  </svg>
+
+  {variant !== 'icon' && (
+    <span class="flex flex-col leading-none">
+      <span class={`font-extrabold tracking-[0.04em] ${nameSize}`}>ELERA</span>
+      <span class={`font-medium tracking-[0.22em] text-muted mt-1 ${subSize}`}>
+        CONSTRUCTION
+      </span>
+    </span>
+  )}
+</a>
