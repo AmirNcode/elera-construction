@@ -1,0 +1,39 @@
+---
+interface Option {
+  value: string;
+  label: string;
+}
+interface Props {
+  name: string;
+  label: string;
+  options: Option[];
+  value?: string;
+  required?: boolean;
+  error?: string;
+}
+
+const { name, label, options, value, required = false, error } = Astro.props;
+---
+<fieldset class="flex flex-col gap-2">
+  <legend class="text-sm font-semibold text-ink">
+    {label}{required && <span class="text-danger ml-1" aria-hidden="true">*</span>}
+  </legend>
+  <div class="flex flex-wrap gap-2">
+    {options.map((opt) => (
+      <label class="cursor-pointer">
+        <input
+          type="radio"
+          name={name}
+          value={opt.value}
+          checked={value === opt.value}
+          required={required}
+          class="peer sr-only"
+        />
+        <span class="inline-block px-4 py-2 border border-hairline rounded-sm text-sm bg-paper text-ink hover:border-midnight peer-checked:bg-midnight peer-checked:text-cream peer-checked:border-midnight peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-midnight">
+          {opt.label}
+        </span>
+      </label>
+    ))}
+  </div>
+  {error && <p class="text-sm text-danger">{error}</p>}
+</fieldset>
