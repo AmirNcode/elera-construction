@@ -29,6 +29,7 @@
     "vite": "^7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@types/node": "^25.7.0",
     "@vitest/coverage-v8": "^4.1.6",
     "vitest": "^4.1.6"
