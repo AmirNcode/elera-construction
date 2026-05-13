@@ -4,9 +4,9 @@
 
 **Goal:** Scaffold the Elera Construction Astro project and build every reusable visual primitive — design tokens, fonts, layout chrome, brand logo, UI components, section components, navigation, footer, mobile sticky bar — leaving a navigable site shell ready to receive content in Plan 2.
 
-**Architecture:** Astro 5 (static-first, with per-route opt-out for SSR later) on Cloudflare Pages. Tailwind CSS v4 via the official `@tailwindcss/vite` plugin. CSS custom properties carry brand tokens, mapped into Tailwind's `@theme` block. Inter variable font self-hosted via `@fontsource-variable/inter`. Components are Astro components (`.astro`), with islands only for interactive UI (mobile nav, FAQ accordion). TDD where logic exists; for components, tests assert that the rendered HTML contains the expected structure, classes, and text via Astro's Container API.
+**Architecture:** Astro 6 (static-first, with per-route opt-out for SSR later) on Cloudflare Pages. Tailwind CSS v4 via the official `@tailwindcss/vite` plugin. CSS custom properties carry brand tokens, mapped into Tailwind's `@theme` block. Inter variable font self-hosted via `@fontsource-variable/inter`. Components are Astro components (`.astro`), with islands only for interactive UI (mobile nav, FAQ accordion). TDD where logic exists; for components, tests assert that the rendered HTML contains the expected structure, classes, and text via Astro's Container API.
 
-**Tech Stack:** Astro 5, Tailwind CSS v4 (`@tailwindcss/vite`), `@astrojs/cloudflare`, TypeScript, Inter variable font (`@fontsource-variable/inter`), Vitest 2 + `@vitest/coverage-v8` for unit tests, Playwright for E2E. Plan 1 uses inline SVG for all icons (sunburst, hamburger, close, checkmark, plus); an icon library (Lucide via `astro-icon`) is added in Plan 2 when service-card icons are needed.
+**Tech Stack:** Astro 6 (Astro 5 features confirmed: `output: 'static'` default with per-route SSR opt-out, `@tailwindcss/vite` plugin, Content Collections at `src/content.config.ts`, `astro:env/server` API — all carried into Astro 6), Tailwind CSS v4 (`@tailwindcss/vite`), `@astrojs/cloudflare`, TypeScript, Inter variable font (`@fontsource-variable/inter`), Vitest 2 + `@vitest/coverage-v8` for unit tests, Playwright for E2E. Plan 1 uses inline SVG for all icons (sunburst, hamburger, close, checkmark, plus); an icon library (Lucide via `astro-icon`) is added in Plan 2 when service-card icons are needed.
 
 **Spec reference:** `docs/superpowers/specs/2026-05-13-elera-construction-website-design.md` (Sections 2, 3, 4).
 
@@ -102,8 +102,10 @@ Run from one level above the project (`/Users/amir/Workspace`):
 
 ```bash
 cd /Users/amir/Workspace
-npm create astro@latest -- --template minimal --no-install --no-git --typescript strict --yes elera-scaffold-tmp
+npm create astro@latest elera-scaffold-tmp -- --template minimal --no-install --no-git --typescript=strict --yes
 ```
+
+The positional dir name (`elera-scaffold-tmp`) must come **before** the `--` separator and the named flags use `--typescript=strict` (with `=`), not space-separated, because `create-astro` otherwise parses `--typescript` as the positional dir name and `strict` as its value.
 
 Expected: creates `/Users/amir/Workspace/elera-scaffold-tmp/` with `package.json`, `astro.config.mjs`, `tsconfig.json`, `src/pages/index.astro`, `public/favicon.svg`, plus the scaffold's `.gitignore`.
 
@@ -174,11 +176,11 @@ Expected: build completes, `dist/` is created with `index.html`.
 ```bash
 git add -A
 git commit -m "$(cat <<'EOF'
-chore: scaffold Astro 5 project with strict TypeScript
+chore: scaffold Astro project with strict TypeScript
 
-Initialize the Astro project using the minimal template with strict
-TypeScript and the ~/* path alias. Dev server and production build
-both verified.
+Initialize the Astro project (currently v6) using the minimal template
+with strict TypeScript and the ~/* path alias. Dev server and
+production build both verified.
 
 Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 EOF
@@ -253,7 +255,7 @@ git add -A
 git commit -m "$(cat <<'EOF'
 feat: add Tailwind CSS v4 via @tailwindcss/vite plugin
 
-Astro 5.2+ uses the official Vite plugin instead of the deprecated
+Astro 5.2+ (current installs are Astro 6) uses the official Vite plugin instead of the deprecated
 @astrojs/tailwind integration. Global stylesheet imports tailwindcss
 and is loaded in the root page. Smoke-tested with utility classes.
 
@@ -276,7 +278,7 @@ EOF
 npx astro add cloudflare --yes
 ```
 
-This installs `@astrojs/cloudflare`, edits `astro.config.mjs` to register the adapter, and sets `output: 'static'` (Astro 5 default — server-rendered routes opt in per-route via `export const prerender = false`).
+This installs `@astrojs/cloudflare`, edits `astro.config.mjs` to register the adapter, and sets `output: 'static'` (Astro 5+ default carried into Astro 6 — server-rendered routes opt in per-route via `export const prerender = false`).
 
 After the command, verify `astro.config.mjs` contains:
 
