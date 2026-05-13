@@ -1,0 +1,33 @@
+---
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  subhead?: string;
+  level?: 1 | 2 | 3;
+  align?: 'left' | 'center';
+  class?: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  subhead,
+  level = 2,
+  align = 'left',
+  class: className = '',
+} = Astro.props;
+
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3';
+const headingSize =
+  level === 1
+    ? 'text-5xl md:text-6xl'
+    : level === 2
+      ? 'text-3xl md:text-5xl'
+      : 'text-2xl md:text-3xl';
+const alignClass = align === 'center' ? 'text-center max-w-2xl mx-auto' : '';
+---
+<div class:list={[alignClass, className]}>
+  {eyebrow && <p class="eyebrow mb-3">{eyebrow}</p>}
+  <Tag class:list={[headingSize, 'font-extrabold']}>{heading}</Tag>
+  {subhead && <p class="mt-4 text-muted text-lg md:max-w-xl">{subhead}</p>}
+</div>
