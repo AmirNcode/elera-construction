@@ -418,32 +418,39 @@ Items intentionally deferred to keep the launch scope tight:
 
 ---
 
-## 9. Inputs Required From Owner Before Build Starts
+## 9. Operational Inputs — Resolved
 
-These are the operational inputs needed before construction begins:
+### Values confirmed for build
 
-### Hard requirements (blocks launch)
-1. **Phone number** for the site and JSON-LD schema
-2. **Lead-destination email address** (e.g., `leads@elera-domain.com` or owner's personal email)
-3. **Hours of operation** (e.g., Mon–Fri 8am–6pm, Sat 9am–4pm, Sun closed)
-4. **Logo SVG file** (or high-res PNG; the in-design recreation is a placeholder)
-5. **Domain name** (for canonical URLs, meta tags, sitemap) — only the name, not DNS-pointing yet
-6. **Founder's first name** (used in About page narrative + lead confirmation email signature; can be anonymized as "the team" if preferred)
-7. **AI-generated placeholder images** (or confirmation they'll be added post-build) — at minimum: 1 hero image, 1 About image, 1 image per service detail page (5), plus 3–5 portfolio entries with before/after
-8. **GitHub account** for repo hosting + Decap auth
-9. **Cloudflare account** for Pages, Turnstile, Web Analytics, Workers KV
-10. **Resend account** + verified domain (for sending email from `@<domain>`)
+| Item | Resolved value |
+|---|---|
+| Phone number (placeholder) | `416-837-6897` — stored in a single config file; one-line swap when final number is set |
+| Lead-destination email | `leads@eleraconstruction.com` (Google Workspace) — also the Resend sender after domain verification |
+| Hours of operation | **None published.** Owner takes calls when awake. Contact page shows "Available 7 days a week — reach out anytime." `openingHours` is omitted from `LocalBusiness` JSON-LD. |
+| Logo | Internal SVG approximation (16-ray sunburst + ELERA wordmark, midnight blue) committed to `src/components/brand/Logo.astro`. Replace with owner-supplied SVG when available. |
+| Domain | `eleraconstruction.com` — used for canonical URLs, OG tags, sitemap, Resend sender, schema URL |
+| Founder first name | Kaveh — appears in About narrative and lead confirmation email sign-off ("— Kaveh & the Elera team") |
+| Imagery | Neutral gray placeholder blocks with labels (e.g., "[Hero — kitchen renovation]") in `src/assets/placeholders/`. Owner supplies AI before/after images for portfolio post-build. |
+| GitHub | Repo: `https://github.com/AmirNcode/elera-construction.git`. Decap OAuth app set up during CMS-wiring phase. |
+| Cloudflare | Account exists. Pages + Turnstile + Web Analytics + Workers KV (KV namespace `lead-fallback`) configured at deploy time. |
+| Resend | Account exists, API key obtained. Domain verification (SPF / DKIM / DMARC for `eleraconstruction.com`) happens at deploy time. API key stored only in Cloudflare Pages env vars and local `.env.local` — never committed. |
 
-### Nice-to-haves (can be added post-launch)
-- Insurance certificate / WSIB clearance numbers (display in footer; otherwise "Insured up to $2M / WSIB Cleared" copy works)
-- Social media URLs (Instagram, Facebook) — for footer
-- Any seed blog post topics / outlines from the owner's expertise
-- Any specific competitor sites the owner wants to differentiate from
+### Secrets handling (security note)
+- `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, and any other secrets live in:
+  - **Local dev:** `.env.local` (git-ignored)
+  - **Production:** Cloudflare Pages → Settings → Environment variables (encrypted)
+- A `.env.example` is committed listing required vars without values
 
-### Things this design will generate (no owner input needed)
-- All page copy (hero, services, about, process, FAQ, privacy, terms) — drafted from this spec
+### Nice-to-haves (post-launch, not blocking)
+- Real WSIB clearance + insurance certificate numbers (display in footer; placeholder copy "Insured up to $2M · WSIB Cleared" works in the meantime)
+- Social media URLs (Instagram, Facebook) for footer
+- Owner-supplied seed blog topics / outlines
+- Final logo SVG from owner
+
+### Things the build will generate (no further owner input needed)
+- All page copy (hero, services, about, process, FAQ, privacy, terms) drafted from this spec
 - 2–3 seed blog posts (likely topics: "What does a kitchen renovation cost in the GTA in 2026", "Choosing a contractor: 7 questions to ask", "Permits for condo renovations in Toronto")
-- All schema markup
+- All schema.org JSON-LD
 - Tailwind theme, component library, layouts
 
 ---
