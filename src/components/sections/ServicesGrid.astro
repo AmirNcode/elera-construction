@@ -1,0 +1,51 @@
+---
+import Card from '~/components/ui/Card.astro';
+
+interface Service {
+  slug: string;
+  title: string;
+  blurb: string;
+}
+
+const services: Service[] = [
+  {
+    slug: 'bathroom-renovation',
+    title: 'Bathroom Renovations',
+    blurb: 'From powder rooms to spa-grade en-suites — tile, plumbing, vanities, all in.',
+  },
+  {
+    slug: 'kitchen-renovation',
+    title: 'Kitchen Renovations',
+    blurb: 'Custom cabinetry, stone counters, and supplier-direct material pricing.',
+  },
+  {
+    slug: 'flooring',
+    title: 'Flooring',
+    blurb: 'Engineered hardwood, tile, luxury vinyl — whole-home or single-room.',
+  },
+  {
+    slug: 'cabinetry',
+    title: 'Cabinetry',
+    blurb: 'Built-ins, vanities, kitchens, walk-in closets — trade pricing on stock and custom.',
+  },
+  {
+    slug: 'full-home-renovation',
+    title: 'Full-Home Renovations',
+    blurb: 'Whole-home gut renos, condo overhauls, and additions — managed end to end.',
+  },
+];
+---
+<section class="py-24 md:py-32">
+  <div class="container-x">
+    <slot name="heading" />
+    <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {services.map((svc) => (
+        <Card href={`/services/${svc.slug}`}>
+          <h3 class="text-xl font-extrabold text-ink">{svc.title}</h3>
+          <p class="mt-3 text-muted text-base leading-relaxed">{svc.blurb}</p>
+          <span class="mt-5 inline-block text-sm font-semibold text-midnight">Explore →</span>
+        </Card>
+      ))}
+    </div>
+  </div>
+</section>
