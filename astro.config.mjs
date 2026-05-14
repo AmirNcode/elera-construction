@@ -17,5 +17,11 @@ export default defineConfig({
   output: 'static',
   ...(isVitest ? {} : { adapter: cloudflare() }),
   vite: { plugins: [tailwindcss()] },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      // Drop pages we don't want indexed even though noindex is also set.
+      filter: (page) => !page.includes('/thank-you') && !page.includes('/admin'),
+    }),
+  ],
 });
