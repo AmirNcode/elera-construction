@@ -1,0 +1,216 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Breadcrumb from '~/components/ui/Breadcrumb.astro';
+import BeforeAfterSlider from '~/components/ui/BeforeAfterSlider.astro';
+import Button from '~/components/ui/Button.astro';
+import SectionHeading from '~/components/ui/SectionHeading.astro';
+import ProjectCard from '~/components/sections/ProjectCard.astro';
+import JsonLd from '~/components/seo/JsonLd.astro';
+import { buildProject, buildBreadcrumb } from '~/lib/seo';
+
+interface GalleryImage {
+  src: string;
+  alt: string;
+  caption?: string;
+  kind: 'before' | 'after' | 'inProgress';
+}
+
+interface RelatedProject {
+  slug: string;
+  title: string;
+  location: string;
+  year: number;
+  services: string[];
+  heroImage: { src: string; alt: string };
+}
+
+interface Props {
+  slug: string;
+  title: string;
+  summary: string;
+  location: string;
+  year: number;
+  services: string[];
+  heroImage: { src: string; alt: string };
+  gallery: GalleryImage[];
+  scope: string[];
+  related: RelatedProject[];
+}
+
+const {
+  slug,
+  title,
+  summary,
+  location,
+  year,
+  services,
+  heroImage,
+  gallery,
+  scope,
+  related,
+} = Astro.props;
+
+const breadcrumbItems = [
+  { name: 'Home', url: '/' },
+  { name: 'Projects', url: '/projects' },
+  { name: title, url: `/projects/${slug}` },
+];
+
+const SERVICE_LABELS: Record<string, string> = {
+  bathroom: 'Bathroom',
+  kitchen: 'Kitchen',
+  flooring: 'Flooring',
+  cabinetry: 'Cabinetry',
+  'full-home': 'Full home',
+};
+
+// Find a before/after pair to feature in the slider, if present
+const firstBefore = gallery.find((g) => g.kind === 'before');
+const firstAfter = gallery.find((g) => g.kind === 'after');
+const hasComparison = firstBefore && firstAfter;
+---
+<PageLayout
+  title={title}
+  description={summary}
+  canonicalPath={`/projects/${slug}`}
+>
+  <Fragment slot="json-ld">
+    <JsonLd
+      data={buildProject({
+        title,
+        summary,
+        slug,
+        year,
+        location,
+      })}
+    />
+    <JsonLd data={buildBreadcrumb(breadcrumbItems)} />
+  </Fragment>
+
+  <section class="bg-cream pt-8 pb-12 md:pt-12 md:pb-16">
+    <div class="container-x">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="mt-8 max-w-3xl">
+        <p class="eyebrow">{location} · {year}</p>
+        <h1 class="mt-4 text-4xl md:text-6xl font-extrabold leading-tight">{title}</h1>
+        <p class="mt-6 text-lg text-muted">{summary}</p>
+        <p class="mt-4 text-sm text-muted">
+          <span class="eyebrow">Services: </span>
+          {services.map((s) => SERVICE_LABELS[s] ?? s).join(' · ')}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-paper py-12 md:py-16">
+    <div class="container-x">
+      <div class="aspect-[16/9] bg-hairline/60 overflow-hidden rounded-sm grid place-items-center">
+        <img src={heroImage.src} alt={heroImage.alt} class="w-full h-full object-cover" />
+      </div>
+    </div>
+  </section>
+
+  {hasComparison && (
+    <section class="bg-cream py-16 md:py-24">
+      <div class="container-x max-w-4xl">
+        <SectionHeading
+          eyebrow="BEFORE & AFTER"
+          heading="See the transformation."
+          subhead="Drag the handle. The before/after photos tell the story better than the scope list."
+          class="mb-10"
+        />
+        <BeforeAfterSlider
+          beforeSrc={firstBefore.src}
+          beforeAlt={firstBefore.alt}
+          afterSrc={firstAfter.src}
+          afterAlt={firstAfter.alt}
+        />
+      </div>
+    </section>
+  )}
+
+  <section class="py-24 md:py-32 bg-paper">
+    <div class="container-x grid lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-5">
+        <SectionHeading
+          eyebrow="SCOPE"
+          heading="What we did."
+        />
+      </div>
+      <ul class="lg:col-span-7 grid gap-3">
+        {scope.map((item) => (
+          <li class="flex gap-3 items-start">
+            <span aria-hidden="true" class="mt-1 inline-grid place-items-center w-5 h-5 rounded-full border border-midnight text-midnight text-xs shrink-0">✓</span>
+            <span class="text-ink leading-relaxed">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-24 md:py-32 bg-cream border-y border-hairline">
+    <div class="container-x">
+      <article class="prose max-w-3xl mx-auto text-ink leading-relaxed">
+        <slot />
+      </article>
+    </div>
+  </section>
+
+  {gallery.length > 0 && (
+    <section class="bg-paper py-24">
+      <div class="container-x">
+        <SectionHeading
+          eyebrow="GALLERY"
+          heading="More from this project."
+          class="mb-12"
+        />
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {gallery.map((img) => (
+            <figure class="rounded-sm overflow-hidden border border-hairline">
+              <div class="aspect-[4/3] bg-hairline/60 grid place-items-center">
+                <img src={img.src} alt={img.alt} loading="lazy" class="w-full h-full object-cover" />
+              </div>
+              {img.caption && <figcaption class="p-4 text-sm text-muted">{img.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section class="bg-cream py-24 md:py-32">
+      <div class="container-x">
+        <SectionHeading
+          eyebrow="MORE PROJECTS"
+          heading="Want something similar?"
+          class="mb-12"
+        />
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {related.map((p) => (
+            <ProjectCard
+              href={`/projects/${p.slug}`}
+              title={p.title}
+              location={p.location}
+              year={p.year}
+              services={p.services}
+              heroSrc={p.heroImage.src}
+              heroAlt={p.heroImage.alt}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="py-24 bg-ink text-cream">
+    <div class="container-x text-center">
+      <p class="eyebrow text-midnight-soft">Want something similar?</p>
+      <h2 class="mt-3 text-3xl md:text-5xl font-extrabold text-cream">Get a quote for your space.</h2>
+      <p class="mt-4 text-cream/70 max-w-prose mx-auto">Free in-home consultation anywhere in the GTA. Line-item proposal within 5 business days.</p>
+      <div class="mt-8 flex flex-wrap gap-3 justify-center">
+        <Button href="/contact" variant="primary">Request a quote →</Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,117 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '~/layouts/PageLayout.astro';
+import ProjectCard from '~/components/sections/ProjectCard.astro';
+import SectionHeading from '~/components/ui/SectionHeading.astro';
+import Button from '~/components/ui/Button.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.year - a.data.year,
+);
+
+const FILTERS = [
+  { value: 'all', label: 'All projects' },
+  { value: 'bathroom', label: 'Bathroom' },
+  { value: 'kitchen', label: 'Kitchen' },
+  { value: 'flooring', label: 'Flooring' },
+  { value: 'cabinetry', label: 'Cabinetry' },
+  { value: 'full-home', label: 'Full home' },
+];
+---
+<PageLayout
+  title="Projects"
+  description="Recent residential renovation projects by Elera Construction across the GTA — bathroom, kitchen, flooring, cabinetry, and full-home renovations."
+  canonicalPath="/projects"
+>
+  <section class="bg-cream pt-16 pb-12 md:pt-24 md:pb-16">
+    <div class="container-x">
+      <p class="eyebrow">Our work</p>
+      <h1 class="mt-4 text-4xl md:text-6xl font-extrabold leading-tight max-w-3xl">Renovations across the GTA.</h1>
+      <p class="mt-6 text-lg text-muted max-w-2xl">
+        Recent projects. Real before-and-after photos arrive as projects wrap; meanwhile, placeholders show what's coming.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-paper py-12 border-y border-hairline">
+    <div class="container-x">
+      <div role="tablist" aria-label="Filter projects" class="flex flex-wrap gap-2" data-filter-bar>
+        {FILTERS.map((f, i) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            data-filter={f.value}
+            class="px-4 py-2 border border-hairline rounded-sm text-sm bg-paper text-ink hover:border-midnight aria-selected:bg-midnight aria-selected:text-cream aria-selected:border-midnight"
+          >{f.label}</button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-paper">
+    <div class="container-x">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" data-project-grid>
+        {projects.map((p) => (
+          <div data-services={p.data.services.join(',')}>
+            <ProjectCard
+              href={`/projects/${p.id}`}
+              title={p.data.title}
+              location={p.data.location}
+              year={p.data.year}
+              services={p.data.services}
+              heroSrc={p.data.heroImage.src}
+              heroAlt={p.data.heroImage.alt}
+            />
+          </div>
+        ))}
+      </div>
+      <p data-empty-state hidden class="mt-12 text-center text-muted">
+        No projects match that filter yet — check back as more projects complete.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-24 bg-ink text-cream">
+    <div class="container-x text-center">
+      <SectionHeading
+        eyebrow="LIKE WHAT YOU SEE?"
+        heading="Tell us about your project."
+        align="center"
+        class="text-cream"
+      />
+      <div class="mt-8 flex flex-wrap gap-3 justify-center">
+        <Button href="/contact" variant="primary">Get a free quote →</Button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Project filtering. Buttons set aria-selected; cards toggle hidden
+    // based on whether their data-services list contains the filter value.
+    const bar = document.querySelector<HTMLElement>('[data-filter-bar]');
+    const grid = document.querySelector<HTMLElement>('[data-project-grid]');
+    const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+    if (bar && grid) {
+      bar.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const button = target.closest<HTMLButtonElement>('[data-filter]');
+        if (!button) return;
+        const filter = button.dataset.filter ?? 'all';
+        // Toggle aria-selected on the buttons
+        bar.querySelectorAll<HTMLElement>('[data-filter]').forEach((b) => {
+          b.setAttribute('aria-selected', b === button ? 'true' : 'false');
+        });
+        // Show / hide cards
+        let shown = 0;
+        grid.querySelectorAll<HTMLElement>('[data-services]').forEach((card) => {
+          const services = (card.dataset.services ?? '').split(',');
+          const match = filter === 'all' || services.includes(filter);
+          card.hidden = !match;
+          if (match) shown++;
+        });
+        if (emptyState) emptyState.hidden = shown > 0;
+      });
+    }
+  </script>
+</PageLayout>

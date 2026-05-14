@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectLayout from '~/layouts/ProjectLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project, allProjects: projects },
+  }));
+}
+
+const { project, allProjects } = Astro.props;
+const { Content } = await render(project);
+const data = project.data;
+
+// Pick up to 3 related projects: same service tags, excluding self.
+const related = allProjects
+  .filter((p) => p.id !== project.id)
+  .filter((p) => p.data.services.some((s: string) => data.services.includes(s)))
+  .slice(0, 3)
+  .map((p) => ({
+    slug: p.id,
+    title: p.data.title,
+    location: p.data.location,
+    year: p.data.year,
+    services: p.data.services,
+    heroImage: p.data.heroImage,
+  }));
+---
+<ProjectLayout
+  slug={project.id}
+  title={data.title}
+  summary={data.summary}
+  location={data.location}
+  year={data.year}
+  services={data.services}
+  heroImage={data.heroImage}
+  gallery={data.gallery}
+  scope={data.scope}
+  related={related}
+>
+  <Content />
+</ProjectLayout>

@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '~/layouts/PageLayout.astro';
+import BlogCard from '~/components/sections/BlogCard.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+---
+<PageLayout
+  title="Blog"
+  description="Guides on residential renovation in the GTA — costs, permits, contractor selection, and renovation process."
+  canonicalPath="/blog"
+>
+  <section class="bg-cream pt-16 pb-12 md:pt-24 md:pb-16">
+    <div class="container-x">
+      <p class="eyebrow">Notes from the field</p>
+      <h1 class="mt-4 text-4xl md:text-6xl font-extrabold leading-tight max-w-3xl">The renovation blog.</h1>
+      <p class="mt-6 text-lg text-muted max-w-2xl">
+        Practical guides for GTA homeowners researching renovations. Real cost ranges, real lessons from real projects.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-paper">
+    <div class="container-x">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {posts.map((post) => (
+          <BlogCard
+            href={`/blog/${post.id}`}
+            title={post.data.title}
+            summary={post.data.summary}
+            publishedAt={post.data.publishedAt}
+            heroSrc={post.data.heroImage.src}
+            heroAlt={post.data.heroImage.alt}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>
