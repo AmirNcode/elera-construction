@@ -1,0 +1,65 @@
+---
+interface Step {
+  title: string;
+  body: string;
+}
+
+interface Props {
+  /** When true, renders a compressed layout for the home page. */
+  compact?: boolean;
+  /** When set, limits to the first N steps. */
+  stepLimit?: number;
+}
+
+const { compact = false, stepLimit } = Astro.props;
+
+const steps: Step[] = [
+  {
+    title: 'Free consultation',
+    body: 'We come to your home — anywhere in the GTA — look at the space, and listen to what you want. No sales pressure, no obligation.',
+  },
+  {
+    title: 'Detailed written quote',
+    body: 'Within 5 business days you get a line-item proposal: labour, materials, finishes, timeline, payment schedule. No vague lump sums.',
+  },
+  {
+    title: 'Design & material selection',
+    body: 'Select finishes from our supplier network — tile, cabinetry, countertops, flooring — at trade pricing you can\'t get at retail.',
+  },
+  {
+    title: 'Permits & scheduling',
+    body: 'If your project needs a permit, we handle the application. You get a confirmed start date in writing.',
+  },
+  {
+    title: 'Construction',
+    body: 'Daily site protection, end-of-day cleanup, weekly progress updates by text or email. One project lead from start to finish.',
+  },
+  {
+    title: 'Final walkthrough & handover',
+    body: 'We walk the finished space with you, fix any deficiencies before final payment, and hand you a closeout package.',
+  },
+  {
+    title: '2-year workmanship warranty',
+    body: 'If something we built fails, we come back and fix it. In writing.',
+  },
+];
+
+const visible = stepLimit ? steps.slice(0, stepLimit) : steps;
+---
+<section class:list={['py-24 md:py-32 bg-cream', compact ? '' : 'border-t border-hairline']}>
+  <div class="container-x">
+    <slot name="heading" />
+    <ol class:list={['mt-12 grid gap-8', compact ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-2']}>
+      {visible.map((step, i) => {
+        const n = String(i + 1).padStart(2, '0');
+        return (
+          <li class="relative border-l-2 border-midnight pl-6">
+            <span class="block text-xs font-bold tracking-widest text-midnight">{n}</span>
+            <h3 class="mt-2 text-xl font-extrabold text-ink">{step.title}</h3>
+            <p class="mt-2 text-muted leading-relaxed">{step.body}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
