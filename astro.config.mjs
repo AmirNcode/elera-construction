@@ -3,6 +3,9 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 
+import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
+
 // Skip the Cloudflare adapter when Vitest loads the config — its Vite plugin
 // trips on the Workers environment Vitest creates. The adapter is only needed
 // for dev/build/deploy, not for unit tests that render components in isolation.
@@ -14,4 +17,5 @@ export default defineConfig({
   output: 'static',
   ...(isVitest ? {} : { adapter: cloudflare() }),
   vite: { plugins: [tailwindcss()] },
+  integrations: [mdx(), sitemap()],
 });
