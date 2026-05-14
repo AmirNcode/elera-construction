@@ -1,0 +1,70 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import { site } from '~/lib/site';
+
+const lastUpdated = 'May 14, 2026';
+---
+<PageLayout
+  title="Privacy Policy"
+  description="How Elera Construction collects, uses, and protects personal information from the website's contact form."
+  canonicalPath="/privacy"
+  noindex={false}
+>
+  <section class="bg-cream pt-16 pb-12">
+    <div class="container-x max-w-3xl">
+      <p class="eyebrow">Privacy</p>
+      <h1 class="mt-4 text-4xl md:text-5xl font-extrabold">Privacy Policy</h1>
+      <p class="mt-4 text-sm text-muted">Last updated: {lastUpdated}</p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-paper">
+    <div class="container-x max-w-3xl prose text-ink leading-relaxed space-y-6">
+
+      <p>
+        This privacy policy explains how {site.name} ("we", "us", or "Elera") collects and uses personal information through this website at {site.url}.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Information we collect</h2>
+      <p>
+        We collect personal information you voluntarily provide through our contact form: your name, phone number and/or email address, project location, property type, optional budget and timeline, and your project description. We do not collect this information through any other means.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">How we use it</h2>
+      <p>
+        We use the information you submit to respond to your renovation enquiry, prepare a quote, and communicate with you about your project. We do not share your information with third parties for marketing purposes. We do not sell your information to anyone.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Service providers</h2>
+      <p>
+        Our website is hosted on Cloudflare Pages. Form submissions are processed by Resend (transactional email delivery) and may be protected by Cloudflare Turnstile (spam prevention). These providers handle your data only to the extent necessary to deliver the service to us and operate under their own privacy policies.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Analytics</h2>
+      <p>
+        We may use Cloudflare Web Analytics, which is a privacy-friendly analytics tool that does not use cookies and does not collect personally identifying information. It tracks aggregate page views, referrers, and approximate visitor location at the country level.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Retention</h2>
+      <p>
+        We retain quote-request information for as long as needed to respond to your enquiry, complete any subsequent project, and comply with our tax and warranty obligations. You can request deletion of your information at any time by emailing {site.email}.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Your rights</h2>
+      <p>
+        Under Canada's Personal Information Protection and Electronic Documents Act (PIPEDA) and Ontario's privacy laws, you have the right to access, correct, or delete personal information we hold about you. To exercise these rights, email us at {site.email}.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Changes to this policy</h2>
+      <p>
+        We may update this policy from time to time. The "last updated" date at the top of this page reflects the most recent change.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Contact</h2>
+      <p>
+        Questions about this policy? Email <a href={`mailto:${site.email}`} class="text-midnight font-semibold hover:underline">{site.email}</a> or call <a href={site.phoneHref} class="text-midnight font-semibold hover:underline">{site.phone}</a>.
+      </p>
+
+    </div>
+  </section>
+</PageLayout>

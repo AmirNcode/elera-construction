@@ -1,0 +1,131 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import SectionHeading from '~/components/ui/SectionHeading.astro';
+import TextInput from '~/components/ui/TextInput.astro';
+import Textarea from '~/components/ui/Textarea.astro';
+import SegmentedControl from '~/components/ui/SegmentedControl.astro';
+import Dropdown from '~/components/ui/Dropdown.astro';
+import Button from '~/components/ui/Button.astro';
+import { site } from '~/lib/site';
+
+const PROPERTY_OPTIONS = [
+  { value: 'detached', label: 'Detached' },
+  { value: 'semi', label: 'Semi-detached' },
+  { value: 'townhouse', label: 'Townhouse' },
+  { value: 'condo', label: 'Condo / apartment' },
+  { value: 'other', label: 'Other' },
+];
+
+const BUDGET_OPTIONS = [
+  { value: '', label: 'Not sure yet' },
+  { value: 'under-25k', label: 'Under $25,000' },
+  { value: '25-50k', label: '$25,000 – $50,000' },
+  { value: '50-100k', label: '$50,000 – $100,000' },
+  { value: '100-250k', label: '$100,000 – $250,000' },
+  { value: '250k+', label: '$250,000+' },
+];
+
+const TIMELINE_OPTIONS = [
+  { value: '', label: 'Just exploring' },
+  { value: 'asap', label: 'ASAP / within a month' },
+  { value: '1-3mo', label: '1–3 months' },
+  { value: '3-6mo', label: '3–6 months' },
+  { value: '6mo+', label: '6+ months' },
+];
+---
+<PageLayout
+  title="Contact"
+  description="Request a free renovation consultation anywhere in the Greater Toronto Area. Call, email, or send a quote request — we respond within 24 hours."
+  canonicalPath="/contact"
+>
+  <section class="bg-cream pt-16 pb-12 md:pt-24 md:pb-16">
+    <div class="container-x max-w-3xl">
+      <p class="eyebrow">Get in touch</p>
+      <h1 class="mt-4 text-4xl md:text-6xl font-extrabold leading-tight">Tell us about your project.</h1>
+      <p class="mt-6 text-lg text-muted">
+        Free in-home consultation anywhere in the GTA. Line-item written quote within 5 business days of the consultation. No sales pressure, no high-pressure callbacks.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-paper">
+    <div class="container-x grid lg:grid-cols-12 gap-12">
+
+      <!--
+        Contact channels (always visible, no JS dependency)
+      -->
+      <div class="lg:col-span-4">
+        <h2 class="text-2xl font-extrabold text-ink">Talk to us directly.</h2>
+
+        <div class="mt-6 space-y-5">
+          <div>
+            <p class="eyebrow">Phone</p>
+            <p class="mt-1"><a href={site.phoneHref} class="text-lg font-semibold text-midnight hover:underline">{site.phone}</a></p>
+            <p class="mt-1 text-sm text-muted">{site.availabilityCopy}</p>
+          </div>
+
+          <div>
+            <p class="eyebrow">Email</p>
+            <p class="mt-1"><a href={`mailto:${site.email}`} class="text-lg font-semibold text-midnight hover:underline">{site.email}</a></p>
+            <p class="mt-1 text-sm text-muted">Typical response within a few hours.</p>
+          </div>
+
+          <div>
+            <p class="eyebrow">Service area</p>
+            <p class="mt-1 text-ink">{site.serviceArea}</p>
+            <p class="mt-1 text-sm text-muted">Toronto, Mississauga, Vaughan, Markham, Richmond Hill, Oakville, Brampton, and surrounding cities.</p>
+          </div>
+        </div>
+      </div>
+
+      <!--
+        Quote-request form. NON-FUNCTIONAL SHELL — the action attribute
+        points at /api/quote which lands in Plan 3. For now, the form
+        submits to /thank-you for visual testing.
+      -->
+      <form
+        class="lg:col-span-8 bg-cream border border-hairline rounded-sm p-8 md:p-12 space-y-6"
+        action="/thank-you"
+        method="GET"
+        data-quote-form
+      >
+        <SectionHeading
+          eyebrow="REQUEST A QUOTE"
+          heading="Send us the details."
+          level={2}
+        />
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <TextInput name="name" label="Your name" required />
+          <TextInput name="location" label="Location" placeholder="Neighborhood or city" required />
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <TextInput name="phone" type="tel" label="Phone (or email below)" autocomplete="tel" />
+          <TextInput name="email" type="email" label="Email (or phone above)" autocomplete="email" />
+        </div>
+
+        <SegmentedControl name="propertyType" label="Property type" options={PROPERTY_OPTIONS} required />
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <Dropdown name="budget" label="Budget (optional)" options={BUDGET_OPTIONS} />
+          <Dropdown name="timeline" label="Timeline (optional)" options={TIMELINE_OPTIONS} />
+        </div>
+
+        <Textarea
+          name="message"
+          label="Project details"
+          rows={5}
+          placeholder="Tell us about the space — bathroom reno, full kitchen, flooring, etc. Approximate size, what you've already decided, what you're still figuring out."
+          required
+        />
+
+        <p class="text-xs text-muted">
+          By submitting this form you'll receive a response from Elera Construction within 24 hours. We don't share your information with anyone else.
+        </p>
+
+        <Button type="submit" variant="primary">Send request →</Button>
+      </form>
+    </div>
+  </section>
+</PageLayout>

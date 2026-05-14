@@ -1,0 +1,69 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import { site } from '~/lib/site';
+
+const lastUpdated = 'May 14, 2026';
+---
+<PageLayout
+  title="Terms of Service"
+  description="Terms of use for the Elera Construction website."
+  canonicalPath="/terms"
+>
+  <section class="bg-cream pt-16 pb-12">
+    <div class="container-x max-w-3xl">
+      <p class="eyebrow">Terms</p>
+      <h1 class="mt-4 text-4xl md:text-5xl font-extrabold">Terms of Service</h1>
+      <p class="mt-4 text-sm text-muted">Last updated: {lastUpdated}</p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-paper">
+    <div class="container-x max-w-3xl prose text-ink leading-relaxed space-y-6">
+
+      <p>
+        These terms govern your use of the {site.name} website at {site.url}. By using the website you agree to these terms.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Informational content</h2>
+      <p>
+        Information on this website is provided for general informational purposes. Cost ranges, timelines, process descriptions, and FAQ answers are estimates based on typical projects in the Greater Toronto Area and do not constitute a quote or contract. The actual cost, timeline, and scope of your renovation will be set out in a written contract signed by both parties.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">No warranty</h2>
+      <p>
+        The website is provided "as is" without warranty of any kind. We make no representation that the information on the website is current, accurate, or complete. Your renovation contract — not the website — governs the workmanship warranty for any work we perform.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Contract scope</h2>
+      <p>
+        Any contractual relationship between you and Elera Construction begins only when both parties sign a written contract for a specific renovation project. Submitting a quote request through this website does not create a contractual relationship.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Intellectual property</h2>
+      <p>
+        Content on this website (text, images, design, code) is the property of Elera Construction or its licensors. You may share and link to pages on the website; you may not reproduce, modify, or redistribute the content for commercial purposes without our written permission.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Third-party links</h2>
+      <p>
+        The website may link to third-party websites (e.g., WSIB clearance verification). We are not responsible for the content or practices of those websites.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Governing law</h2>
+      <p>
+        These terms are governed by the laws of the Province of Ontario and the federal laws of Canada applicable in Ontario.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Changes</h2>
+      <p>
+        We may update these terms from time to time. The "last updated" date at the top of this page reflects the most recent change.
+      </p>
+
+      <h2 class="text-2xl font-extrabold mt-10">Contact</h2>
+      <p>
+        Questions? Email <a href={`mailto:${site.email}`} class="text-midnight font-semibold hover:underline">{site.email}</a>.
+      </p>
+
+    </div>
+  </section>
+</PageLayout>

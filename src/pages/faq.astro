@@ -1,0 +1,159 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import SectionHeading from '~/components/ui/SectionHeading.astro';
+import FaqAccordion from '~/components/ui/FaqAccordion.astro';
+import Button from '~/components/ui/Button.astro';
+import JsonLd from '~/components/seo/JsonLd.astro';
+import { buildFAQPage } from '~/lib/seo';
+
+const groups = [
+  {
+    label: 'Pricing & quotes',
+    items: [
+      {
+        question: 'How long does it take to get a quote?',
+        answer:
+          'A free in-home consultation is typically scheduled within 5 business days of contact. A line-item written quote follows within 5 business days of the consultation. Larger projects (full-home renos, additions) may take up to 10 business days.',
+      },
+      {
+        question: 'Why don\'t you publish package pricing?',
+        answer:
+          'Because every project is meaningfully different — by property type, scope, layout, finishes, structural conditions, and permit requirements. Package pricing forces us to either inflate the number to cover edge cases (overcharging the simple jobs) or hide allowances that get exceeded mid-project (everyone loses). A real quote is honest about what your specific project will cost.',
+      },
+      {
+        question: 'What payment terms do you use?',
+        answer:
+          'Milestone-based draws tied to construction verifiables, not calendar dates. Typical bathroom: 10% on signing, 40% at rough-in complete, 40% at tile complete, 10% on final walkthrough. Larger projects split across more milestones. Payment schedule is in your contract.',
+      },
+    ],
+  },
+  {
+    label: 'Timeline',
+    items: [
+      {
+        question: 'How long does a typical renovation take?',
+        answer:
+          'Bathrooms: 3–4 weeks. Kitchens: 5–8 weeks of construction plus 4–8 weeks of cabinetry lead time. Flooring: 1–2 weeks per floor. Full-home gut renovations: 4–8 months of construction. Add 2–4 weeks of design and material selection on the front end for any project.',
+      },
+      {
+        question: 'When can you start?',
+        answer:
+          'Once a contract is signed, most renovations start within 2–6 weeks depending on permit requirements, cabinetry lead times, and our schedule. The confirmed start date is in your contract.',
+      },
+    ],
+  },
+  {
+    label: 'Permits & condos',
+    items: [
+      {
+        question: 'Do I need a permit for my renovation?',
+        answer:
+          'Most cosmetic renovations (paint, tile, cabinetry replacement, fixture swaps) don\'t require a permit. Plumbing rough-in changes, electrical panel changes, structural changes, and most condo renovations do. We handle the permit application if your project needs one.',
+      },
+      {
+        question: 'Do you do condo renovations?',
+        answer:
+          'Yes. We\'re experienced with condo board approvals, status-certificate requirements, contractor insurance certificates, elevator booking, acoustic underlayment specs, and building-rule compliance. Plan on 2–6 extra weeks for board approval on top of the construction timeline.',
+      },
+      {
+        question: 'Can you work with my architect or designer?',
+        answer:
+          'Yes. Many of our clients bring us drawings from an architect or interior designer. We bid against those drawings, flag any constructability concerns, and build to spec. We can also recommend architects and designers when you need one.',
+      },
+    ],
+  },
+  {
+    label: 'Materials & finishes',
+    items: [
+      {
+        question: 'Do you supply materials or do I?',
+        answer:
+          'Either works. Most clients let us source cabinetry, tile, stone, fixtures, and hardware through our supplier accounts — you get trade pricing meaningfully below retail showroom quotes. If you\'ve already sourced something specific, we\'ll install your supplied materials with a clear scope and warranty boundary.',
+      },
+      {
+        question: 'What\'s the supplier-pricing advantage really worth?',
+        answer:
+          'It varies, but typically 25–40% below retail showroom quotes for the same product. On a $80K kitchen, that\'s often $10K–$20K back in your pocket — or more square feet of premium materials at the same budget.',
+      },
+    ],
+  },
+  {
+    label: 'Warranty',
+    items: [
+      {
+        question: 'What\'s your warranty?',
+        answer:
+          'Two-year workmanship warranty in writing on everything we build, signed and dated as part of your closeout package. If something we built fails within that period, we come back and fix it. Manufacturer warranties on appliances, fixtures, and cabinetry pass through directly to you and are typically longer.',
+      },
+    ],
+  },
+  {
+    label: 'Working with us',
+    items: [
+      {
+        question: 'Who is my day-to-day contact?',
+        answer:
+          'You\'ll have one project lead — by name and cell number — from consultation through final walkthrough. Weekly written progress updates by text or email. No call-centre handoffs.',
+      },
+      {
+        question: 'Will my house be wrecked during the renovation?',
+        answer:
+          'No. Daily site protection (floor coverings, dust barriers, plastic sheeting), end-of-day cleanup, and HEPA vacuums on all dust-generating work. Areas of your home outside the work zone stay livable and clean.',
+      },
+      {
+        question: 'Can I stay in my home during construction?',
+        answer:
+          'For most single-room renovations (bathroom, kitchen, flooring), yes. We set up temporary alternatives where needed (a temporary kitchen, for example). For full-home gut renovations, most clients move out for 4–8 months. We\'ll be honest with you about which it should be.',
+      },
+    ],
+  },
+];
+
+// Flatten for the JSON-LD FAQPage schema
+const allFaqs = groups.flatMap((g) => g.items);
+---
+<PageLayout
+  title="FAQ"
+  description="Common questions about Elera Construction's renovation process, pricing, timeline, permits, materials, warranty, and working with us."
+  canonicalPath="/faq"
+>
+  <Fragment slot="json-ld">
+    <JsonLd data={buildFAQPage(allFaqs)} />
+  </Fragment>
+
+  <section class="bg-cream pt-16 pb-12 md:pt-24 md:pb-16">
+    <div class="container-x max-w-3xl">
+      <p class="eyebrow">Frequently asked</p>
+      <h1 class="mt-4 text-4xl md:text-6xl font-extrabold leading-tight">Questions homeowners actually ask.</h1>
+      <p class="mt-6 text-lg text-muted">
+        Real questions, honest answers. If yours isn't here, get in touch — we'll answer it personally.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 md:py-24 bg-paper">
+    <div class="container-x max-w-3xl">
+      {groups.map((group) => (
+        <div class="mb-12 last:mb-0">
+          <SectionHeading
+            eyebrow={group.label.toUpperCase()}
+            heading={group.label}
+            level={2}
+            class="mb-6"
+          />
+          <FaqAccordion items={group.items} singleExpand={true} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="py-24 bg-ink text-cream">
+    <div class="container-x text-center max-w-2xl">
+      <p class="eyebrow text-midnight-soft">DIDN'T FIND YOUR QUESTION?</p>
+      <h2 class="mt-3 text-3xl md:text-5xl font-extrabold text-cream">We'll answer it directly.</h2>
+      <div class="mt-8 flex flex-wrap gap-3 justify-center">
+        <Button href="/contact" variant="primary">Get in touch →</Button>
+      </div>
+    </div>
+  </section>
+</PageLayout>
