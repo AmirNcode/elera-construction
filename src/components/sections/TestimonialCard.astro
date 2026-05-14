@@ -1,0 +1,29 @@
+---
+interface Props {
+  quote?: string;
+  author?: string;
+  context?: string;
+}
+const { quote, author, context } = Astro.props;
+const isPlaceholder = !quote;
+---
+<figure
+  class="bg-midnight-soft border border-midnight/15 rounded-sm p-8 md:p-12 max-w-3xl mx-auto"
+  data-placeholder={isPlaceholder ? 'true' : undefined}
+>
+  {isPlaceholder ? (
+    <p class="text-midnight italic text-lg md:text-xl leading-relaxed">
+      "Client testimonials from completed projects will appear here as projects wrap up. Want to be our first review? <a href="/contact" class="underline">Get a quote</a>."
+    </p>
+  ) : (
+    <>
+      <blockquote class="text-ink text-lg md:text-2xl leading-relaxed">
+        "{quote}"
+      </blockquote>
+      <figcaption class="mt-6 text-sm">
+        <span class="font-semibold text-ink">{author}</span>
+        {context && <span class="text-muted block mt-1">{context}</span>}
+      </figcaption>
+    </>
+  )}
+</figure>
