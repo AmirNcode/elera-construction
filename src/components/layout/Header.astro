@@ -1,0 +1,55 @@
+---
+import Logo from '~/components/brand/Logo.astro';
+import { site } from '~/lib/site';
+
+const navItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Process', href: '/process' },
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
+];
+---
+<header
+  data-scrolled="false"
+  class="fixed top-0 inset-x-0 z-40 transition-all duration-200 data-[scrolled=true]:bg-cream/95 data-[scrolled=true]:backdrop-blur data-[scrolled=true]:border-b data-[scrolled=true]:border-hairline"
+>
+  <div class="container-x flex items-center justify-between py-5">
+    <Logo variant="horizontal" size={36} class="text-midnight" />
+
+    <nav class="hidden md:flex items-center gap-8" aria-label="Primary">
+      {navItems.map((n) => (
+        <a href={n.href} class="text-sm font-medium text-ink/85 hover:text-midnight transition-colors">{n.label}</a>
+      ))}
+      <a
+        href={site.phoneHref}
+        class="ml-2 inline-flex items-center px-4 py-2 border border-midnight text-midnight text-sm font-semibold tracking-wide rounded-sm hover:bg-midnight hover:text-cream transition-colors"
+      >{site.phone}</a>
+    </nav>
+
+    <button
+      type="button"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+      class="md:hidden p-2 text-ink"
+      data-open-menu
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+    </button>
+  </div>
+</header>
+
+<script>
+  // Toggle the scrolled state for the sticky header.
+  const header = document.querySelector('header[data-scrolled]');
+  if (header) {
+    const onScroll = () => {
+      header.setAttribute('data-scrolled', window.scrollY > 8 ? 'true' : 'false');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+</script>
