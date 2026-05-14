@@ -23,8 +23,12 @@ describe('ProcessSteps', () => {
     const html = await c.renderToString(ProcessSteps, {
       props: { compact: true, stepLimit: 4 },
     });
-    expect(html).toContain('01');
-    expect(html).toContain('04');
-    expect(html).not.toContain('05');
+    // Step numbers render as the text content of a <span>, e.g. ">01<".
+    // Use that exact pattern to avoid colliding with line/column digits in
+    // Astro's dev-mode source-loc attributes (e.g. data-astro-source-loc="50:5").
+    expect(html).toMatch(/>01<\/span>/);
+    expect(html).toMatch(/>04<\/span>/);
+    expect(html).not.toMatch(/>05<\/span>/);
+    expect(html).not.toMatch(/>07<\/span>/);
   });
 });
