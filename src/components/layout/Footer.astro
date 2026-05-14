@@ -1,0 +1,54 @@
+---
+import Logo from '~/components/brand/Logo.astro';
+import { site } from '~/lib/site';
+
+const year = new Date().getFullYear();
+const services = [
+  { label: 'Bathroom Renovations', href: '/services/bathroom-renovation' },
+  { label: 'Kitchen Renovations', href: '/services/kitchen-renovation' },
+  { label: 'Flooring', href: '/services/flooring' },
+  { label: 'Cabinetry', href: '/services/cabinetry' },
+  { label: 'Full-Home Renovations', href: '/services/full-home-renovation' },
+];
+---
+<footer class="mt-auto bg-ink text-cream pt-16 pb-8">
+  <div class="container-x grid gap-12 md:grid-cols-4">
+    <div class="md:col-span-2">
+      <Logo variant="stacked" size={56} class="text-cream" />
+      <p class="mt-6 text-cream/70 max-w-xs text-sm leading-relaxed">{site.description}</p>
+      <div class="mt-6 flex flex-col gap-1 text-sm">
+        <a href={site.phoneHref} class="text-cream hover:text-midnight-soft">{site.phone}</a>
+        <a href={`mailto:${site.email}`} class="text-cream hover:text-midnight-soft">{site.email}</a>
+        <span class="text-cream/60">{site.availabilityCopy}</span>
+      </div>
+    </div>
+
+    <div>
+      <h4 class="text-xs font-bold tracking-[0.2em] uppercase text-cream/60">Services</h4>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        {services.map((svc) => (
+          <li><a href={svc.href} class="text-cream/85 hover:text-cream">{svc.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="text-xs font-bold tracking-[0.2em] uppercase text-cream/60">Company</h4>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        <li><a href="/about" class="text-cream/85 hover:text-cream">About</a></li>
+        <li><a href="/process" class="text-cream/85 hover:text-cream">Process</a></li>
+        <li><a href="/projects" class="text-cream/85 hover:text-cream">Projects</a></li>
+        <li><a href="/faq" class="text-cream/85 hover:text-cream">FAQ</a></li>
+        <li><a href="/contact" class="text-cream/85 hover:text-cream">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-x mt-12 pt-6 border-t border-cream/10 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-cream/60">
+    <div>© {year} {site.name}. {site.trust.insuranceCopy} · {site.trust.wsibCopy} · {site.trust.warrantyCopy}.</div>
+    <div class="flex gap-6">
+      <a href="/privacy" class="hover:text-cream">Privacy</a>
+      <a href="/terms" class="hover:text-cream">Terms</a>
+    </div>
+  </div>
+</footer>
