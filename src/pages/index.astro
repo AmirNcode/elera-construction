@@ -1,22 +1,55 @@
 ---
-import '~/styles/global.css';
+import PageLayout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/sections/Hero.astro';
+import TrustStrip from '~/components/sections/TrustStrip.astro';
+import ServicesGrid from '~/components/sections/ServicesGrid.astro';
+import ProcessSteps from '~/components/sections/ProcessSteps.astro';
+import TestimonialCard from '~/components/sections/TestimonialCard.astro';
+import SectionHeading from '~/components/ui/SectionHeading.astro';
 import { site } from '~/lib/site';
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Token smoke test</title>
-  </head>
-  <body>
-    <div class="container-x py-24">
-      <span class="eyebrow">Tokens loaded</span>
-      <h1 class="text-5xl mt-3">{site.name}</h1>
-      <p class="mt-4 text-muted max-w-prose">{site.description}</p>
-      <div class="mt-8 flex gap-3">
-        <span class="px-4 py-2 bg-midnight text-cream rounded">midnight on cream</span>
-        <span class="px-4 py-2 bg-midnight-soft text-midnight rounded">midnight on soft</span>
-      </div>
+<PageLayout title={site.name}>
+  <Hero
+    eyebrow="Greater Toronto Area"
+    headline="Renovations built the way"
+    headlineAccent="top developers"
+    headlineTail="build."
+    subhead="Bathrooms, kitchens, full-home renovations across the GTA — by a team with 10+ years building for Toronto's leading developers, and the supplier relationships to back it."
+    primaryCta={{ label: 'Get a free quote', href: '/contact' }}
+    secondaryCta={{ label: 'See our work', href: '/projects' }}
+  />
+
+  <TrustStrip />
+
+  <ServicesGrid>
+    <SectionHeading
+      slot="heading"
+      eyebrow="WHAT WE DO"
+      heading="Renovations, done properly."
+      subhead="From a single bathroom to a full home gut. House, condo, or townhouse — same standard of work."
+      align="center"
+    />
+  </ServicesGrid>
+
+  <ProcessSteps compact stepLimit={4}>
+    <SectionHeading
+      slot="heading"
+      eyebrow="OUR PROCESS"
+      heading="How it works."
+      subhead="Same process for every project — no surprises."
+      align="center"
+    />
+  </ProcessSteps>
+
+  <section class="py-24 bg-cream">
+    <div class="container-x">
+      <SectionHeading
+        eyebrow="WHAT OUR CLIENTS SAY"
+        heading="Trusted by GTA homeowners."
+        align="center"
+        class="mb-12"
+      />
+      <TestimonialCard />
     </div>
-  </body>
-</html>
+  </section>
+</PageLayout>
