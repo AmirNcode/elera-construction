@@ -1,0 +1,45 @@
+---
+import '~/styles/global.css';
+import { site } from '~/lib/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Path-only canonical (e.g., '/services') — site.url is prepended. */
+  canonicalPath?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  canonicalPath = Astro.url.pathname,
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(canonicalPath, site.url).toString();
+const fullTitle = title === site.name ? title : `${title} · ${site.name}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#F0EEE6" />
+
+    <!-- Open Graph (full schema wired up in Plan 2) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={site.name} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <slot />
+  </body>
+</html>
