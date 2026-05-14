@@ -1,0 +1,80 @@
+---
+import Logo from '~/components/brand/Logo.astro';
+import { site } from '~/lib/site';
+
+const navItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Process', href: '/process' },
+  { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+<div
+  id="mobile-nav"
+  data-open="false"
+  class="fixed inset-0 z-50 bg-ink text-cream data-[open=false]:hidden flex-col"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Mobile navigation"
+>
+  <div class="container-x flex items-center justify-between py-5">
+    <Logo variant="horizontal" size={36} class="text-cream" />
+    <button
+      type="button"
+      aria-label="Close menu"
+      class="p-2 text-cream"
+      data-close-menu
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 6l12 12M18 6l-12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <nav class="container-x flex-1 flex flex-col gap-1 pt-8" aria-label="Primary mobile">
+    {navItems.map((n) => (
+      <a href={n.href} class="py-3 text-2xl font-extrabold tracking-tight border-b border-cream/10">
+        {n.label}
+      </a>
+    ))}
+  </nav>
+
+  <div class="container-x py-8 flex flex-col gap-3">
+    <a
+      href={site.phoneHref}
+      class="block w-full text-center px-5 py-4 bg-midnight text-cream text-base font-semibold rounded-sm"
+    >Call {site.phone}</a>
+    <a
+      href="/contact"
+      class="block w-full text-center px-5 py-4 border border-cream/30 text-cream text-base font-semibold rounded-sm"
+    >Get a free quote →</a>
+  </div>
+</div>
+
+<script>
+  const dialog = document.getElementById('mobile-nav');
+  const openBtn = document.querySelector('[data-open-menu]');
+  const closeBtn = document.querySelector('[data-close-menu]');
+  if (dialog && openBtn && closeBtn) {
+    const open = () => {
+      dialog.setAttribute('data-open', 'true');
+      dialog.style.display = 'flex';
+      (openBtn as HTMLElement).setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      dialog.setAttribute('data-open', 'false');
+      dialog.style.display = 'none';
+      (openBtn as HTMLElement).setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    dialog.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dialog.getAttribute('data-open') === 'true') close();
+    });
+  }
+</script>
