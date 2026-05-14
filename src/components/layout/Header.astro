@@ -9,6 +9,10 @@ const navItems = [
   { label: 'About', href: '/about' },
   { label: 'FAQ', href: '/faq' },
 ];
+
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? currentPath === '/' : currentPath.startsWith(href);
 ---
 <header
   data-scrolled="false"
@@ -19,7 +23,11 @@ const navItems = [
 
     <nav class="hidden md:flex items-center gap-8" aria-label="Primary">
       {navItems.map((n) => (
-        <a href={n.href} class="text-sm font-medium text-ink/85 hover:text-midnight transition-colors">{n.label}</a>
+        <a
+          href={n.href}
+          aria-current={isActive(n.href) ? 'page' : undefined}
+          class="text-sm font-medium text-ink/85 hover:text-midnight transition-colors aria-[current=page]:text-midnight aria-[current=page]:font-bold"
+        >{n.label}</a>
       ))}
       <a
         href={site.phoneHref}

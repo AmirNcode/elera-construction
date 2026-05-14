@@ -27,6 +27,9 @@ const serviceTags = services.map((s) => SERVICE_LABELS[s] ?? s).join(' · ');
       src={heroSrc}
       alt={heroAlt}
       loading="lazy"
+      decoding="async"
+      width="800"
+      height="600"
       class="w-full h-full object-cover"
     />
   </div>

@@ -5,25 +5,29 @@ interface Props {
   context?: string;
 }
 const { quote, author, context } = Astro.props;
-const isPlaceholder = !quote;
 ---
-<figure
-  class="bg-midnight-soft border border-midnight/15 rounded-sm p-8 md:p-12 max-w-3xl mx-auto"
-  data-placeholder={isPlaceholder ? 'true' : undefined}
->
-  {isPlaceholder ? (
-    <p class="text-midnight italic text-lg md:text-xl leading-relaxed">
-      "Client testimonials from completed projects will appear here as projects wrap up. Want to be our first review? <a href="/contact" class="underline">Get a quote</a>."
-    </p>
-  ) : (
-    <>
-      <blockquote class="text-ink text-lg md:text-2xl leading-relaxed">
-        "{quote}"
-      </blockquote>
-      <figcaption class="mt-6 text-sm">
-        <span class="font-semibold text-ink">{author}</span>
-        {context && <span class="text-muted block mt-1">{context}</span>}
-      </figcaption>
-    </>
-  )}
-</figure>
+{quote ? (
+  <figure class="bg-midnight-soft border border-midnight/15 rounded-sm p-8 md:p-12 max-w-3xl mx-auto">
+    <blockquote class="text-ink text-lg md:text-2xl leading-relaxed">
+      "{quote}"
+    </blockquote>
+    <figcaption class="mt-6 text-sm">
+      <span class="font-semibold text-ink">{author}</span>
+      {context && <span class="text-muted block mt-1">{context}</span>}
+    </figcaption>
+  </figure>
+) : (
+  <div class="grid sm:grid-cols-3 gap-px bg-hairline border border-hairline rounded-sm overflow-hidden max-w-3xl mx-auto">
+    {[
+      { stat: '10+', label: 'Years on the build side', sub: 'of Toronto\'s largest developments' },
+      { stat: '25–40%', label: 'Below retail on materials', sub: 'through our trade supplier network' },
+      { stat: '2-yr', label: 'Written workmanship warranty', sub: 'on everything we build' },
+    ].map(({ stat, label, sub }) => (
+      <div class="bg-paper px-8 py-10 text-center">
+        <p class="text-4xl font-extrabold text-midnight tracking-tight">{stat}</p>
+        <p class="mt-2 text-sm font-semibold text-ink">{label}</p>
+        <p class="mt-1 text-xs text-muted">{sub}</p>
+      </div>
+    ))}
+  </div>
+)}

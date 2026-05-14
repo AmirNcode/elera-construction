@@ -29,36 +29,44 @@ const {
 } = Astro.props;
 
 const isDark = variant === 'dark';
-const sectionClass = isDark
-  ? 'bg-ink text-cream'
-  : 'bg-cream text-ink';
 const subheadColor = isDark ? 'text-cream/70' : 'text-muted';
 const eyebrowColor = isDark ? 'text-midnight-soft' : 'text-midnight';
-const accentColor = isDark ? 'text-midnight-soft' : 'text-midnight';
 ---
-<section class:list={['relative py-24 md:py-32', sectionClass]}>
-  <div class="container-x grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+<section class:list={[
+  'relative py-24 md:py-32 overflow-hidden',
+  isDark ? 'bg-ink text-cream' : 'bg-cream text-ink',
+]}>
+  {/* Grain texture layer */}
+  {!isDark && (
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-[0.035]"
+      style="background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")">
+    </div>
+  )}
+  {/* Radial glow from the image side */}
+  {!isDark && (
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0"
+      style="background:radial-gradient(ellipse at 75% 50%, rgba(30,58,95,0.07) 0%, transparent 65%)">
+    </div>
+  )}
+
+  <div class="container-x relative grid md:grid-cols-2 gap-12 md:gap-16 items-center">
     <div>
       {eyebrow && <p class:list={['eyebrow', eyebrowColor]}>{eyebrow}</p>}
       <h1 class="mt-4 text-4xl md:text-6xl font-extrabold leading-tight">
         {headline}{' '}
-        {headlineAccent && <span class={accentColor}>{headlineAccent}</span>}
+        {headlineAccent && <em class="accent-italic not-italic">{headlineAccent}</em>}
         {headlineTail && <> {headlineTail}</>}
       </h1>
       {subhead && <p class:list={['mt-6 text-lg max-w-prose', subheadColor]}>{subhead}</p>}
       <div class="mt-8 flex flex-wrap gap-3">
         <Button href={primaryCta.href} variant="primary">{primaryCta.label} →</Button>
         {secondaryCta && (
-          <Button href={secondaryCta.href} variant="secondary">{secondaryCta.label}</Button>
+          <Button href={secondaryCta.href} variant="secondary" onDark={isDark}>{secondaryCta.label}</Button>
         )}
       </div>
     </div>
     <div class="aspect-[4/5] bg-hairline/60 rounded-sm overflow-hidden">
-      <slot name="image">
-        <div class="w-full h-full grid place-items-center text-sm text-muted">
-          [Hero image]
-        </div>
-      </slot>
+      <slot name="image" />
     </div>
   </div>
 </section>

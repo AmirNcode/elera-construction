@@ -1,5 +1,6 @@
 @import "@fontsource-variable/inter/index.css";
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700&display=swap");
 
 /* ===== Brand tokens (CSS custom properties) =====
    Single source of truth for the design system.
@@ -25,6 +26,7 @@
 
   /* Type */
   --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
 
   /* Rhythm */
   --container-max: 1280px;
@@ -49,6 +51,7 @@
   --color-danger: var(--color-danger);
 
   --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
 }
 
 /* Base */
@@ -75,8 +78,22 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.025em;
   line-height: 1.08;
   font-weight: 800;
-  color: var(--color-ink);
+  color: inherit;
   margin: 0;
+}
+
+/* Scale tracking: very tight only at display sizes */
+h1 { letter-spacing: -0.04em; }
+h2 { letter-spacing: -0.03em; }
+h3 { letter-spacing: -0.02em; }
+h4, h5, h6 { letter-spacing: -0.01em; font-weight: 600; }
+
+/* Playfair italic accent — drop into any headline for the accent phrase */
+.accent-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--color-midnight);
 }
 
 /* Eyebrow utility class — used above section headings */
@@ -97,6 +114,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 @media (min-width: 768px) {
   .container-x { padding-inline: var(--gutter-desktop); }
+}
+
+/* Grain texture overlay — apply to a relative-positioned section */
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Reduced motion */

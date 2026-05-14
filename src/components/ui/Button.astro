@@ -8,6 +8,8 @@ interface Props {
   class?: string;
   /** When true, opens external links in a new tab with rel=noopener noreferrer. */
   external?: boolean;
+  /** Use on dark (bg-ink) backgrounds so secondary variant stays legible. */
+  onDark?: boolean;
 }
 
 const {
@@ -16,16 +18,21 @@ const {
   type = 'button',
   class: className = '',
   external = false,
+  onDark = false,
 } = Astro.props;
 
-const base =
-  'inline-flex items-center justify-center font-semibold tracking-wide text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-midnight';
+const focusRing = onDark
+  ? 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream'
+  : 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-midnight';
+
+const base = `inline-flex items-center justify-center font-semibold tracking-wide text-sm transition-colors duration-150 ${focusRing}`;
 
 const variants: Record<Variant, string> = {
   primary:
     'bg-midnight text-cream hover:bg-midnight-deep px-6 py-3 rounded-sm',
-  secondary:
-    'bg-transparent text-ink border border-ink/70 hover:bg-ink hover:text-cream px-6 py-3 rounded-sm',
+  secondary: onDark
+    ? 'bg-transparent text-cream border border-cream/50 hover:bg-cream hover:text-ink px-6 py-3 rounded-sm'
+    : 'bg-transparent text-ink border border-ink/70 hover:bg-ink hover:text-cream px-6 py-3 rounded-sm',
   ghost:
     'bg-transparent text-midnight underline underline-offset-4 decoration-2 decoration-transparent hover:decoration-midnight px-1 py-1',
 };

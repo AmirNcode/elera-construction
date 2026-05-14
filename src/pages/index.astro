@@ -73,13 +73,11 @@ const homeFaqs = [
   <!-- "Why Elera" dark inset -->
   <section class="bg-ink text-cream py-24 md:py-32">
     <div class="container-x grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-      <div class="aspect-[4/3] bg-[#1a2530] grid place-items-center rounded-sm">
-        <span class="text-sm text-cream/40">[Founder / project shot placeholder]</span>
-      </div>
+      <div class="aspect-[4/3] bg-[#1a2530] rounded-sm overflow-hidden"></div>
       <div>
         <p class="eyebrow text-midnight-soft">Why Elera</p>
         <h2 class="mt-4 text-3xl md:text-5xl font-extrabold leading-tight text-cream">
-          Ten years building for <span class="text-midnight-soft italic font-light">the city's top developers.</span>
+          Ten years building for <em class="accent-italic text-midnight-soft">the city's top developers.</em>
         </h2>
         <p class="mt-6 text-cream/75 leading-relaxed">
           Our founder, {site.founder}, spent over a decade on the build side of Toronto's largest residential projects — and brought every supplier relationship with him.
@@ -175,7 +173,7 @@ const homeFaqs = [
       <p class="mt-4 text-cream/70">Anywhere in the GTA. Line-item written proposal within 5 business days.</p>
       <div class="mt-8 flex flex-wrap gap-3 justify-center">
         <Button href="/contact" variant="primary">Get a free quote →</Button>
-        <Button href={site.phoneHref} variant="secondary">Call {site.phone}</Button>
+        <Button href={site.phoneHref} variant="secondary" onDark>Call {site.phone}</Button>
       </div>
     </div>
   </section>
