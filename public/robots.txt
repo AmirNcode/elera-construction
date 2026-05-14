@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Don't index the CMS admin panel
+Disallow: /admin
+
+Sitemap: https://eleraconstruction.com/sitemap-index.xml
