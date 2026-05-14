@@ -1,0 +1,10 @@
+---
+interface Props {
+  data: unknown;
+}
+const { data } = Astro.props;
+// JSON.stringify is safe for schema.org JSON-LD. We don't escape closing
+// </script> sequences because schema.org content never contains them.
+const json = JSON.stringify(data);
+---
+<script type="application/ld+json" set:html={json}></script>

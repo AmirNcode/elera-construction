@@ -1,6 +1,8 @@
 ---
 import '~/styles/global.css';
 import { site } from '~/lib/site';
+import { buildLocalBusiness } from '~/lib/seo';
+import JsonLd from '~/components/seo/JsonLd.astro';
 
 interface Props {
   title: string;
@@ -8,6 +10,8 @@ interface Props {
   /** Path-only canonical (e.g., '/services') — site.url is prepended. */
   canonicalPath?: string;
   noindex?: boolean;
+  /** Open Graph image (absolute or origin-relative). Defaults to /og-default.png. */
+  ogImage?: string;
 }
 
 const {
@@ -15,10 +19,15 @@ const {
   description = site.description,
   canonicalPath = Astro.url.pathname,
   noindex = false,
+  ogImage = '/og-default.png',
 } = Astro.props;
 
 const canonical = new URL(canonicalPath, site.url).toString();
 const fullTitle = title === site.name ? title : `${title} · ${site.name}`;
+const ogImageUrl = ogImage.startsWith('http')
+  ? ogImage
+  : new URL(ogImage, site.url).toString();
+const localBusiness = buildLocalBusiness();
 ---
 <!doctype html>
 <html lang="en">
@@ -32,12 +41,23 @@ const fullTitle = title === site.name ? title : `${title} · ${site.name}`;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#F0EEE6" />
 
-    <!-- Open Graph (full schema wired up in Plan 2) -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content={site.name} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- JSON-LD: LocalBusiness on every page, plus optional page-specific schemas via slot -->
+    <JsonLd data={localBusiness} />
+    <slot name="json-ld" />
   </head>
   <body class="min-h-screen flex flex-col">
     <slot />
