@@ -1,0 +1,38 @@
+---
+import Card from '~/components/ui/Card.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  location: string;
+  year: number;
+  services: string[];
+  heroSrc: string;
+  heroAlt: string;
+}
+
+const { href, title, location, year, services, heroSrc, heroAlt } = Astro.props;
+const SERVICE_LABELS: Record<string, string> = {
+  bathroom: 'Bathroom',
+  kitchen: 'Kitchen',
+  flooring: 'Flooring',
+  cabinetry: 'Cabinetry',
+  'full-home': 'Full home',
+};
+const serviceTags = services.map((s) => SERVICE_LABELS[s] ?? s).join(' · ');
+---
+<Card href={href} class="p-0 overflow-hidden">
+  <div class="aspect-[4/3] bg-hairline/60 grid place-items-center overflow-hidden">
+    <img
+      src={heroSrc}
+      alt={heroAlt}
+      loading="lazy"
+      class="w-full h-full object-cover"
+    />
+  </div>
+  <div class="p-6">
+    <h3 class="text-xl font-extrabold text-ink leading-snug">{title}</h3>
+    <p class="mt-2 text-sm text-muted">{location} · {year}</p>
+    <p class="mt-3 text-xs eyebrow">{serviceTags}</p>
+  </div>
+</Card>

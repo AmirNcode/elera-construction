@@ -1,0 +1,111 @@
+---
+// A before/after image comparison slider. Two images stacked, with the
+// "after" image clipped from the left by a draggable handle. CSS handles
+// the layout; a small client-side script (TS) handles drag + keyboard.
+
+interface Props {
+  beforeSrc: string;
+  beforeAlt: string;
+  afterSrc: string;
+  afterAlt: string;
+  /** Initial reveal percent (0–100). Default 50. */
+  initial?: number;
+}
+
+const { beforeSrc, beforeAlt, afterSrc, afterAlt, initial = 50 } = Astro.props;
+---
+<div
+  class="relative w-full aspect-[4/3] bg-hairline/40 overflow-hidden rounded-sm select-none touch-none"
+  data-before-after
+  style={`--reveal: ${initial}%;`}
+>
+  <!-- BEFORE: full-bleed underneath -->
+  <img
+    src={beforeSrc}
+    alt={beforeAlt}
+    loading="lazy"
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+  <!-- AFTER: clipped from the right edge inward -->
+  <div
+    class="absolute inset-0 overflow-hidden"
+    style="clip-path: inset(0 calc(100% - var(--reveal)) 0 0);"
+  >
+    <img
+      src={afterSrc}
+      alt={afterAlt}
+      loading="lazy"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+  </div>
+  <!-- HANDLE -->
+  <div
+    class="absolute top-0 bottom-0 w-px bg-cream/95 pointer-events-none"
+    style="left: var(--reveal);"
+  ></div>
+  <button
+    type="button"
+    role="slider"
+    aria-label="Before/after slider"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow={initial}
+    class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-cream text-midnight font-bold border-2 border-midnight cursor-ew-resize"
+    style="left: var(--reveal);"
+    data-handle
+  >↔</button>
+  <!-- Captions -->
+  <span class="absolute top-3 left-3 px-2 py-1 bg-ink/70 text-cream text-xs tracking-wide uppercase rounded-sm">Before</span>
+  <span class="absolute top-3 right-3 px-2 py-1 bg-midnight text-cream text-xs tracking-wide uppercase rounded-sm">After</span>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-before-after]').forEach((root) => {
+    const handle = root.querySelector<HTMLButtonElement>('[data-handle]');
+    if (!handle) return;
+
+    const setReveal = (clientX: number) => {
+      const rect = root.getBoundingClientRect();
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      const pct = (x / rect.width) * 100;
+      root.style.setProperty('--reveal', `${pct}%`);
+      handle.setAttribute('aria-valuenow', `${Math.round(pct)}`);
+    };
+
+    let dragging = false;
+    const onMove = (e: PointerEvent) => {
+      if (!dragging) return;
+      setReveal(e.clientX);
+    };
+    handle.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      handle.setPointerCapture(e.pointerId);
+    });
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', (e) => {
+      dragging = false;
+      handle.releasePointerCapture(e.pointerId);
+    });
+
+    // Click anywhere on the slider to jump to that position
+    root.addEventListener('click', (e) => {
+      if (e.target === handle) return;
+      setReveal((e as MouseEvent).clientX);
+    });
+
+    // Keyboard support
+    handle.addEventListener('keydown', (e: KeyboardEvent) => {
+      const cur = Number(handle.getAttribute('aria-valuenow') ?? '50');
+      const step = e.shiftKey ? 10 : 2;
+      let next = cur;
+      if (e.key === 'ArrowLeft') next = Math.max(0, cur - step);
+      else if (e.key === 'ArrowRight') next = Math.min(100, cur + step);
+      else if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = 100;
+      else return;
+      e.preventDefault();
+      root.style.setProperty('--reveal', `${next}%`);
+      handle.setAttribute('aria-valuenow', `${next}`);
+    });
+  });
+</script>
